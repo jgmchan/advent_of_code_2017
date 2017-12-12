@@ -63,7 +63,6 @@ defmodule Advent.Day03Test do
     end
   end
 
-  @tag :skip
   test "find_level" do
     assert Advent.Day03.find_level(1) == 1
     assert Advent.Day03.find_level(2) == 3
@@ -72,7 +71,6 @@ defmodule Advent.Day03Test do
     assert Advent.Day03.find_level(79) == 9
   end
 
-  @tag :skip
   test "midpoint" do
     assert Advent.Day03.midpoint(10..13) == 11
     assert Advent.Day03.midpoint(14..17) == 15
@@ -80,7 +78,6 @@ defmodule Advent.Day03Test do
     assert Advent.Day03.midpoint(22..25) == 23
   end
 
-  @tag :skip
   test "Part 1" do
     assert Advent.Day03.part_1(1) == 0
     assert Advent.Day03.part_1(12) == 3
