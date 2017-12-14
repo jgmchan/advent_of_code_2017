@@ -1,5 +1,5 @@
 defmodule Advent.Day12 do
-  @input "lib/day12_input"
+  @input "inputs/day12_input"
 
   def solve_1 do
     File.read!(@input)

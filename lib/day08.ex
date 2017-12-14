@@ -1,5 +1,5 @@
 defmodule Advent.Day08 do
-  @input "lib/day08_input"
+  @input "inputs/day08_input"
 
   def solve_2 do
     @input |> File.stream!() |> part_2()

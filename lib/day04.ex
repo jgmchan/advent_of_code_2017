@@ -1,5 +1,5 @@
 defmodule Advent.Day04 do
-  @input "lib/day04_input"
+  @input "inputs/day04_input"
 
   def solve_1, do: count_valid(@input, &duplicate?/1)
   def solve_2, do: count_valid(@input, &anagram?/1)

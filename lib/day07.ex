@@ -1,6 +1,6 @@
 # ANSWER PART 2: 596
 defmodule Advent.Day07 do
-  @input "lib/day07_input"
+  @input "inputs/day07_input"
 
   def solve_2 do
     bottom = solve_1()

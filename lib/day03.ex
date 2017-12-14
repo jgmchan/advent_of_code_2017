@@ -88,7 +88,7 @@ defmodule Advent.Day03 do
   def solve_2, do: part_2(@input)
 
   def part_2(target, num \\ 1, value \\ 0)
-  def part_2(target, num, value) when value > target, do: value
+  def part_2(target, _num, value) when value > target, do: value
   def part_2(target, num, _value), do: part_2(target, num + 1, moves(num))
 
   def moves(num) do
