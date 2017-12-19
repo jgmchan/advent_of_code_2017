@@ -3,6 +3,11 @@ defmodule Advent.Day10 do
 
   use Bitwise
 
+  def get_knot_hash(input) do
+    0..255
+    |> part_2(input)
+  end
+
   def solve_1 do
     part_1(
       0..255,
