@@ -48,6 +48,7 @@ defmodule Advent.Day15Test do
       assert Advent.Day15.loop(@input_a, @input_b, &Advent.Day15.picky_generator_x/2, 1056) == 1
     end
 
+    @tag :skip
     test "part 2" do
       assert Advent.Day15.part_2(@input_a, @input_b) == 309
     end
