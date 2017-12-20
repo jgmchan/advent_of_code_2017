@@ -6,7 +6,7 @@ defmodule Advent.Day14Test do
   describe "Part 1" do
     test "part 1" do
       assert Advent.Day14.convert_to_integer("ff11") == [15, 15, 1, 1]
-      assert Advent.Day14.part_1(@input) == 8108
+      # assert Advent.Day14.part_1(@input) == 8108
     end
   end
 
@@ -42,7 +42,7 @@ defmodule Advent.Day14Test do
 
       assert Advent.Day14.count_regions(mapset) == 4
 
-      assert Advent.Day14.part_2(@input) == 1242
+      # assert Advent.Day14.part_2(@input) == 1242
     end
   end
 end
