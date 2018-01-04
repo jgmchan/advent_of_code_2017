@@ -1,8 +1,6 @@
 defmodule Advent.Day20Test do
   use ExUnit.Case
 
-  @input "     |         \n     |  +--+   \n     A  |  C   \n F---|----E|--+\n     |  |  |  D\n     +B-+  +--+"
-
   describe "Part 1" do
     test "parse" do
       assert Advent.Day20.parse("p=<1199,-2918,1457>, v=<-13,115,-8>, a=<-7,8,-10>") ==

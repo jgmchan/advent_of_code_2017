@@ -1,7 +1,7 @@
 defmodule Advent.Day14Test do
   use ExUnit.Case
 
-  @input "flqrgnkx"
+  #  @input "flqrgnkx"
 
   describe "Part 1" do
     test "part 1" do
