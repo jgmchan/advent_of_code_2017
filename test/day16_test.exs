@@ -14,24 +14,18 @@ defmodule Advent.Day16Test do
       assert Advent.Day16.swap(list, 10, 0) == [10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
     end
 
-    test "moves" do
+    test "dance" do
       start = ["a", "b", "c", "d", "e"]
-      assert Advent.Day16.move(start, {:s, [1]}) == ["e", "a", "b", "c", "d"]
-      assert Advent.Day16.move(start, {:x, [3, 4]}) == ["a", "b", "c", "e", "d"]
-      assert Advent.Day16.move(start, {:p, ["e", "b"]}) == ["a", "e", "c", "d", "b"]
-    end
-
-    test "part 1" do
-      start = ["a", "b", "c", "d", "e"]
-      assert Advent.Day16.part_1(start, "s1,x3/4,pe/b") == ["b", "a", "e", "d", "c"]
+      assert Advent.Day16.do_dance(start, "s1,x3/4,pe/b", 1) == ["b", "a", "e", "d", "c"]
     end
   end
 
   describe "Part 2" do
-    test "cycle" do
+    test "dance" do
       start = ["a", "b", "c", "d", "e"]
-      moves = Advent.Day16.parse("s1,x3/4,pe/b")
-      assert Advent.Day16.detect_cycle(start, moves) == 4
+      moves = "s1,x3/4,pe/b"
+
+      assert Advent.Day16.do_dance(start, moves, 1_000_000_000) == ["a", "b", "c", "d", "e"]
     end
   end
 end

@@ -4,41 +4,61 @@ defmodule Advent.Day16 do
   @times 1_000_000_000
 
   def solve_1 do
-    part_1(@start, File.read!(@input))
+    do_dance(@start, File.read!(@input), 1)
   end
 
   def solve_2 do
-    part_2(@start, File.read!(@input))
+    do_dance(@start, File.read!(@input), @times)
   end
 
-  def part_1(start, input) do
-    moves = parse(input)
-    dance(start, moves, 1)
+  def do_dance(programs, input, count) do
+    dance_moves =
+      parse(input)
+      |> compile_dance(programs)
+
+    dance(programs, dance_moves, count)
   end
 
-  def part_2(start, input) do
-    moves = parse(input)
-    dance(start, moves, rem(@times, detect_cycle(start, moves)))
+  def compile_dance(instructions, programs) do
+    positions = Enum.to_list(0..(length(programs) - 1))
+    substitutions = Enum.reduce(programs, %{}, &Map.put(&2, &1, &1))
+    Enum.reduce(instructions, {positions, substitutions}, &full_dance_mapping/2)
   end
 
-  def detect_cycle(line, moves, seen \\ %{}, times \\ 0) do
-    case Map.get(seen, line) do
-      nil ->
-        new_line = dance(line, moves)
-        seen = Map.put(seen, line, new_line)
-        detect_cycle(new_line, moves, seen, times + 1)
-
-      _ ->
-        times
-    end
+  # Count is 1, return the dance moves applied to the original programs
+  def dance(programs, dance_moves, 1) do
+    apply_dance(programs, dance_moves)
   end
 
-  def dance(line, moves, times \\ 1)
-  def dance(line, _, times) when times <= 0, do: line
+  # Even number of dances, similar to f(x * x)
+  def dance(programs, dance_moves, count) when rem(count, 2) == 0 do
+    dance(programs, double(dance_moves), div(count, 2))
+  end
 
-  def dance(line, moves, times) do
-    line = Enum.reduce(moves, line, &move(&2, &1))
-    dance(line, moves, times - 1)
+  # Odd number of dances, similar to x * f(x * x)
+  def dance(programs, dance_moves, count) do
+    dance(programs, double(dance_moves), div(count, 2))
+    |> apply_dance(dance_moves)
+  end
+
+  # Apply the dance_moves to the programs
+  defp apply_dance(programs, {positions, substitutions}) do
+    positions
+    |> Enum.map(&Map.get(substitutions, Enum.at(programs, &1)))
+  end
+
+  # Doubles the dance moves on itself, this makes each
+  # application of the dance moves to 2**n times
+  defp double({positions, substitutions}) do
+    positions =
+      positions
+      |> Enum.map(&Enum.at(positions, &1))
+
+    substitutions =
+      substitutions
+      |> Enum.reduce(%{}, fn {k, v}, acc -> Map.put(acc, k, substitutions[v]) end)
+
+    {positions, substitutions}
   end
 
   def parse(input) do
@@ -58,17 +78,36 @@ defmodule Advent.Day16 do
     end)
   end
 
-  def move(start, {:s, [pos]}) do
-    {head, tail} = Enum.split(start, -rem(pos, length(start)))
+  def full_dance_mapping({:s, [pos]}, {positions, substitutions}) do
+    {shift(positions, pos), substitutions}
+  end
+
+  def full_dance_mapping({:x, [index_1, index_2]}, {positions, substitutions}) do
+    {swap(positions, index_1, index_2), substitutions}
+  end
+
+  def full_dance_mapping({:p, [prog_1, prog_2]}, {positions, substitutions}) do
+    substitutions =
+      substitutions
+      |> Enum.map(fn
+        {k, ^prog_1} -> {k, prog_2}
+        {k, ^prog_2} -> {k, prog_1}
+        kv -> kv
+      end)
+      |> Enum.into(%{})
+
+    {positions, substitutions}
+  end
+
+  def shift(list, pos) do
+    {head, tail} = Enum.split(list, -rem(pos, length(list)))
     tail ++ head
   end
 
-  def move(start, {:x, [index_1, index_2]}), do: swap(start, index_1, index_2)
-
-  def move(start, {:p, [prog_1, prog_2]}) do
-    index_1 = Enum.find_index(start, &(&1 == prog_1))
-    index_2 = Enum.find_index(start, &(&1 == prog_2))
-    swap(start, index_1, index_2)
+  def swap(list, prog_1, prog_2) when is_binary(prog_1) and is_binary(prog_2) do
+    index_1 = Enum.find_index(list, &(&1 == prog_1))
+    index_2 = Enum.find_index(list, &(&1 == prog_2))
+    swap(list, index_1, index_2)
   end
 
   def swap(list, index_1, index_2) when index_1 > index_2 do
